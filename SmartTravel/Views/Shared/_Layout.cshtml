@@ -1,0 +1,55 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_Layout</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajaxSetup({ cache: false });
+            $('#search').keyup(function () {
+                $('#result').html('');
+                $('#state').val('');
+                var searchField = $('#search').val();
+                var expression = new RegExp(searchField, "i");
+                $.ajax({
+                    url: '@Url.Action("GetLocation", "api/Search")',
+                    dataType: "json",
+                    data: { search: $("#search").val() },
+                    success: function (data) {
+                        debugger;
+                        $.each(data, function (key, value) {
+                            $('#result').append('<li data-location-id="' + value.Location_Id + '" class="list-group-item link-class" >' + value.Location_Name + ' | <span class="text-muted">' + value.Location_Name + '</span></li>');                          
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        debugger;
+                        alert("Error");
+                    }
+                });
+            });
+
+            $('#result').on('click', 'li', function () {
+                var dataId = $(this).attr("data-location-id");
+                var click_text = $(this).text().split('|');
+                $('#search').val($.trim(click_text[0]));
+                $('#locationId').val(dataId);
+                $("#result").html('');
+            });
+        });
+    </script>
+</head>
+<body>
+    <div> 
+        @RenderBody();
+    </div>
+</body>
+</html>

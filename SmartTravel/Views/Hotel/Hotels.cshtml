@@ -1,0 +1,20 @@
+﻿@model SmartTravel.ViewModels.SearchViewModel
+@{
+    ViewBag.Title = "Hotels";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Hotels</h2>
+
+@using (Html.BeginForm("SearchHotel", "Hotel", FormMethod.Post, new { name = "HotelSearchForm" }))
+{
+    @Html.AntiForgeryToken()
+
+<div align="center">
+    @Html.TextBoxFor(m => m.LocationName, new { @name = "search", @id = "search", @placeholder = "Enter Hotel/Location Name", @class = "form-control" })
+    @Html.HiddenFor(m => m.LocationID, new { @name = "locationId", @id = "locationId" })
+</div>
+<ul class="list-group" id="result" style="overflow:auto; "width: 300px; height: 200px;"></ul>
+
+    <input type="submit" value="Search Hotel" />
+}
